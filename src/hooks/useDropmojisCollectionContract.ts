@@ -26,7 +26,7 @@ export function useDropmojisCollectionContract() {
         Address.parse(dropmojisCollectionAddress)
       ) as any;
 
-      if (contract.init !== undefined) return client.open(contract);
+      return client.open(contract);
     } catch (error) {
       console.error("Error opening contract:", error);
       return null; // Return null for the Maybe type in case of an error
@@ -39,18 +39,14 @@ export function useDropmojisCollectionContract() {
   };
 
   return {
-    mint: async () => {
-      try {
-        await dropmojisCollectionContract?.send(
-          sender,
-          {
-            value: toNano(price),
-          },
-          "Mint"
-        );
-      } catch (error) {
-        console.log("error", error);
-      }
+    mint: () => {
+      dropmojisCollectionContract?.send(
+        sender,
+        {
+          value: toNano(price),
+        },
+        "Mint"
+      );
     },
   };
 }

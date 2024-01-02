@@ -48,7 +48,6 @@ export const Button = styled.button`
   color: var(--tg-theme-button-text-color);
   font-weight: 700;
   cursor: pointer;
-  pointer-events: ${(props) => (props.disabled ? "none" : "inherit")};
 `;
 
 export const Ellipsis = styled.div`
