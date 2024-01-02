@@ -9,7 +9,6 @@ import { dropmojisCollectionAddress, mintParams, price } from "./config";
 import { useAsyncInitialize } from "./useAsyncInitialize";
 import { useTonClient } from "./useTonClient";
 import { useTonConnect } from "./useTonConnect";
-import { Contract, beginCell } from "@ton/core";
 
 const sleep = (time: number) =>
   new Promise((resolve) => setTimeout(resolve, time));
@@ -22,11 +21,16 @@ export function useDropmojisCollectionContract() {
   const dropmojisCollectionContract = useAsyncInitialize(async () => {
     if (!client || !wallet) return;
 
-    const contract = DropmojisCollection.fromAddress(
-      Address.parse(dropmojisCollectionAddress)
-    );
+    try {
+      const contract = DropmojisCollection.fromAddress(
+        Address.parse(dropmojisCollectionAddress)
+      ) as any;
 
-    return client.open(contract) as OpenedContract<DropmojisCollection>;
+      if (contract.init !== undefined) return client.open(contract);
+    } catch (error) {
+      console.error("Error opening contract:", error);
+      return null; // Return null for the Maybe type in case of an error
+    }
   }, [client, wallet]);
   const message: MintParams = {
     $$type: "MintParams",
@@ -36,13 +40,17 @@ export function useDropmojisCollectionContract() {
 
   return {
     mint: async () => {
-      await dropmojisCollectionContract?.send(
-        sender,
-        {
-          value: toNano(price),
-        },
-        "Mint"
-      );
+      try {
+        await dropmojisCollectionContract?.send(
+          sender,
+          {
+            value: toNano(price),
+          },
+          "Mint"
+        );
+      } catch (error) {
+        console.log("error", error);
+      }
     },
   };
 }
