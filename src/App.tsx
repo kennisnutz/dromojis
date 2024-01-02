@@ -2,7 +2,11 @@ import "./App.css";
 import { DropmojisCollection } from "./components/DropmojisCollectionContract";
 import styled from "styled-components";
 import { Button, FlexBoxCol, FlexBoxRow } from "./components/styled/styled";
-import { CHAIN, TonConnectButton } from "@tonconnect/ui-react";
+import {
+  CHAIN,
+  TonConnectButton,
+  TonConnectUIProvider,
+} from "@tonconnect/ui-react";
 import { useTonConnect } from "./hooks/useTonConnect";
 import "@twa-dev/sdk";
 
@@ -27,23 +31,25 @@ function App() {
   const { network } = useTonConnect();
 
   return (
-    <StyledApp>
-      <AppContainer>
-        <FlexBoxCol>
-          <FlexBoxRow>
-            <TonConnectButton />
-            <Button>
-              {network
-                ? network === CHAIN.MAINNET
-                  ? "mainnet"
-                  : "testnet"
-                : "N/A"}
-            </Button>
-          </FlexBoxRow>
-          <DropmojisCollection />
-        </FlexBoxCol>
-      </AppContainer>
-    </StyledApp>
+    <TonConnectUIProvider manifestUrl="https://kennisnutz.github.io/dromojis/tonconnect-manifest.json">
+      <StyledApp>
+        <AppContainer>
+          <FlexBoxCol>
+            <FlexBoxRow>
+              <TonConnectButton />
+              <Button>
+                {network
+                  ? network === CHAIN.MAINNET
+                    ? "mainnet"
+                    : "testnet"
+                  : "N/A"}
+              </Button>
+            </FlexBoxRow>
+            <DropmojisCollection />
+          </FlexBoxCol>
+        </AppContainer>
+      </StyledApp>
+    </TonConnectUIProvider>
   );
 }
 
