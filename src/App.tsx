@@ -31,25 +31,23 @@ function App() {
   const { network } = useTonConnect();
 
   return (
-    <TonConnectUIProvider manifestUrl="https://kennisnutz.github.io/dromojis/tonconnect-manifest.json">
-      <StyledApp>
-        <AppContainer>
-          <FlexBoxCol>
-            <FlexBoxRow>
-              <TonConnectButton />
-              <Button>
-                {network
-                  ? network === CHAIN.MAINNET
-                    ? "mainnet"
-                    : "testnet"
-                  : "N/A"}
-              </Button>
-            </FlexBoxRow>
-            <DropmojisCollection />
-          </FlexBoxCol>
-        </AppContainer>
-      </StyledApp>
-    </TonConnectUIProvider>
+    <StyledApp>
+      <AppContainer>
+        <FlexBoxCol>
+          <FlexBoxRow>
+            <TonConnectButton />
+            <Button>
+              {network
+                ? network === CHAIN.MAINNET
+                  ? "mainnet"
+                  : "testnet"
+                : "N/A"}
+            </Button>
+          </FlexBoxRow>
+          <DropmojisCollection />
+        </FlexBoxCol>
+      </AppContainer>
+    </StyledApp>
   );
 }
 
